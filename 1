@@ -1,0 +1,44 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import random
+
+directions = ['Left', 'Center', 'Right']
+
+
+name = input("Enter your name: ")
+shots = int(input("How many shots do you want to take? "))
+
+results = []
+
+for i in range(shots):
+    while True:
+        shot = input(f"Shot {i+1} - Choose direction (Left/Center/Right): ").capitalize()
+        if shot in directions:
+            break
+        print("Please choose Left, Center, or Right.")
+        if random.random() < 0.5:
+        outcome = 'Goal'
+    else:
+        outcome = 'Miss'
+    
+    results.append({"Shot": i+1, "Direction": shot, "Result": outcome})
+
+
+df = pd.DataFrame(results)
+df['Player'] = name
+
+
+goals = df['Result'].value_counts().get('Goal', 0)
+misses = df['Result'].value_counts().get('Miss', 0)
+
+print(f"\n{name}, you scored {goals} goals out of {shots} shots!")
+
+df.to_csv(f"{name}_football_game.csv", index=False)
+
+print(f"Results saved to {name}_football_game.csv")
+
+
+plt.bar(['Goals', 'Misses'], [goals, misses], color=['green', 'red'])
+plt.title(f"{name}'s Football Game Results")
+plt.ylabel('Count')
+plt.show()
